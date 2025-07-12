@@ -2,91 +2,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Skill Swap - SkillSwap</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
-                <h2>SkillSwap</h2>
+                <a href="/">
+                    <h2>SkillSwap</h2>
+                </a>
             </div>
             <div class="nav-menu">
-                <a href="{% url 'index' %}" class="nav-link">Home</a>
-                <a href="{% url 'profile' %}" class="nav-link">Profile</a>
-                <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
-                <button class="btn btn-outline" onclick="logout()">Logout</button>
+                <a href="/" class="nav-link">Home</a>
+                <a href="/profile/" class="nav-link">Profile</a>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
             </div>
         </div>
     </nav>
 
-    <main class="main-content">
+    <div class="swap-form-container">
         <div class="container">
-            <div class="swap-form-container">
-                <div class="form-header">
-                    <h1>Request Skill Swap</h1>
-                    <p>Send a swap request to connect and learn</p>
-                </div>
+            <div class="form-header">
+                <h1>Request Skill Swap</h1>
+                <p>Connect with others to exchange skills and knowledge</p>
+            </div>
 
-                <div class="recipient-info" id="recipientInfo">
-                    <div class="recipient-card">
-                        <img id="recipientAvatar" src="https://via.placeholder.com/60" alt="Recipient">
-                        <div class="recipient-details">
-                            <h3 id="recipientName">Loading...</h3>
-                            <p id="recipientLocation"></p>
-                        </div>
+            <div class="swap-request-form">
+                <form id="swapForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="skillRequested">Skill You Want to Learn</label>
+                        <input type="text" id="skillRequested" name="skill_requested" required placeholder="e.g., Photoshop, Python, Guitar">
                     </div>
-                </div>
-
-                <form class="swap-request-form" id="swapRequestForm">
-                    <div class="form-section">
-                        <h3>Swap Details</h3>
-                        
-                        <div class="form-group">
-                            <label for="offeredSkill">Skill I'm Offering</label>
-                            <select id="offeredSkill" name="offeredSkill" required>
-                                <option value="">Select a skill you offer</option>
-                                <!-- Options populated by JavaScript -->
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="requestedSkill">Skill I Want to Learn</label>
-                            <select id="requestedSkill" name="requestedSkill" required>
-                                <option value="">Select a skill they offer</option>
-                                <!-- Options populated by JavaScript -->
-                            </select>
-                        </div>
+                    
+                    <div class="form-group">
+                        <label for="skillOffered">Skill You Can Offer</label>
+                        <input type="text" id="skillOffered" name="skill_offered" required placeholder="e.g., Excel, Cooking, Spanish">
                     </div>
-
-                    <div class="form-section">
-                        <h3>Message (Optional)</h3>
-                        <div class="form-group">
-                            <label for="swapMessage">Add a personal message</label>
-                            <textarea id="swapMessage" name="message" rows="4" 
-                                placeholder="Hi! I'd love to exchange skills with you. Tell me more about your availability and how we can help each other learn."></textarea>
-                        </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Describe what you want to learn and what you can offer in exchange..."></textarea>
                     </div>
-
+                    
+                    <div class="form-group">
+                        <label for="preferredTime">Preferred Time</label>
+                        <select id="preferredTime" name="preferred_time">
+                            <option value="">Select preferred time</option>
+                            <option value="weekends">Weekends</option>
+                            <option value="evenings">Evenings</option>
+                            <option value="weekdays">Weekdays</option>
+                            <option value="flexible">Flexible</option>
+                        </select>
+                    </div>
+                    
                     <div class="form-actions">
-                        <button type="button" class="btn btn-outline" onclick="goBack()">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Send Request</button>
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                        <button type="button" class="btn btn-outline" onclick="window.location.href='/'">Cancel</button>
                     </div>
                 </form>
             </div>
         </div>
-    </main>
+    </div>
 
-    <script src="{% static 'js/script.js' %}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuthStatus();
-            loadSwapFormData();
-        });
+        function logout() {
+            fetch('/logout/', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(() => {
+                window.location.href = '/';
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+            });
+        }
 
-        document.getElementById('swapRequestForm').addEventListener('submit', submitSwapRequest);
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        document.getElementById('swapForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('skill_requested', document.getElementById('skillRequested').value);
+            formData.append('skill_offered', document.getElementById('skillOffered').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('preferred_time', document.getElementById('preferredTime').value);
+            
+            fetch('/api/swaps/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Swap request submitted successfully!');
+                window.location.href = '/';
+            })
+            .catch(error => {
+                console.error('Error submitting swap request:', error);
+                alert('Error submitting request. Please try again.');
+            });
+        });
     </script>
 </body>
 </html>

@@ -21,10 +21,10 @@ class Skill(models.Model):
 class Swap(models.Model):
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name='requested_swaps')
     provider = models.ForeignKey(User, on_delete=models.CASCADE, related_name='provided_swaps', null=True, blank=True)
-    skill_requested = models.CharField(max_length=100, blank=True, null=True)
-    skill_offered = models.CharField(max_length=100, blank=True, null=True)
-    description = models.TextField(blank=True)
-    preferred_time = models.CharField(max_length=50, blank=True)
+    skill_requested = models.CharField(max_length=100, default="")
+    skill_offered = models.CharField(max_length=100, default="")
+    description = models.TextField(blank=True, default="")
+    preferred_time = models.CharField(max_length=50, blank=True, default="")
     status = models.CharField(max_length=20, choices=[
         ('pending', 'Pending'),
         ('accepted', 'Accepted'),
@@ -55,4 +55,4 @@ class UserProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user.username}'s Profile"
+        return f"{self.user.username}'s Profile" 

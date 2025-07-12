@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Skill_swap_db',
         'USER': 'root',           # Your MySQL Username
-        'PASSWORD': 'asmita12345',  # Your MySQL Password
+        'PASSWORD': '1234',  # Your MySQL Password
         'HOST': 'localhost',       # Set to '127.0.0.1' if localhost doesn't work
         'PORT': '3306',            # Default MySQL port
         'OPTIONS': {
