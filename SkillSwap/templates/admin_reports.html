@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - SkillSwap Admin</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar admin-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>SkillSwap Admin</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="{% url 'admin_dashboard' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'admin_users' %}" class="nav-link">Users</a>
+                <a href="{% url 'admin_skills' %}" class="nav-link">Skills</a>
+                <a href="{% url 'admin_swaps' %}" class="nav-link">Swaps</a>
+                <a href="{% url 'admin_messages' %}" class="nav-link">Messages</a>
+                <a href="{% url 'admin_reports' %}" class="nav-link active">Reports</a>
+                <button class="btn btn-outline" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content admin-main">
+        <div class="container">
+            <div class="admin-header">
+                <h1>Download Reports</h1>
+                <p>Export platform data and analytics</p>
+            </div>
+
+            <div class="reports-container">
+                <!-- User Reports Section -->
+                <div class="report-section">
+                    <h2>User Reports</h2>
+                    <div class="report-grid">
+                        <div class="report-card">
+                            <div class="report-icon">👥</div>
+                            <h3>User Activity Report</h3>
+                            <p>Detailed logs of user registrations, profile updates, and activity patterns</p>
+                            <div class="report-actions">
+                                <button class="btn btn-outline" onclick="downloadReport('user_activity', 'csv')">CSV</button>
+                                <button class="btn btn-primary" onclick="downloadReport('user_activity', 'pdf')">PDF</button>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <div class="report-icon">📊</div>
+                            <h3>User Demographics</h3>
+                            <p>Geographic distribution, skill categories, and user growth metrics</p>
+                            <div class="report-actions">
+                                <button class="btn btn-outline" onclick="downloadReport('user_demographics', 'csv')">CSV</button>
+                                <button class="btn btn-primary" onclick="downloadReport('user_demographics', 'pdf')">PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Swap Reports Section -->
+                <div class="report-section">
+                    <h2>Swap Reports</h2>
+                    <div class="report-grid">
+                        <div class="report-card">
+                            <div class="report-icon">🔄</div>
+                            <h3>Swap Statistics</h3>
+                            <p>Success rates, completion times, and popular skill exchanges</p>
+                            <div class="report-actions">
+                                <button class="btn btn-outline" onclick="downloadReport('swap_stats', 'csv')">CSV</button>
+                                <button class="btn btn-primary" onclick="downloadReport('swap_stats', 'pdf')">PDF</button>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <div class="report-icon">⏱️</div>
+                            <h3>Swap Timeline Analysis</h3>
+                            <p>Request response times, acceptance rates, and completion patterns</p>
+                            <div class="report-actions">
+                                <button class="btn btn-outline" onclick="downloadReport('swap_timeline', 'csv')">CSV</button>
+                                <button class="btn btn-primary" onclick="downloadReport('swap_timeline', 'pdf')">PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Reports Section -->
+                <div class="report-section">
+                    <h2>Feedback Reports</h2>
+                    <div class="report-grid">
+                        <div class="report-card">
+                            <div class="report-icon">⭐</div>
+                            <h3>Ratings & Reviews</h3>
+                            <p>User feedback, rating distributions, and satisfaction metrics</p>
+                            <div class="report-actions">
+                                <button class="btn btn-outline" onclick="downloadReport('feedback', 'csv')">CSV</button>
+                                <button class="btn btn-primary" onclick="downloadReport('feedback', 'pdf')">PDF</button>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <div class="report-icon">📝</div>
+                            <h3>Platform Issues</h3>
+                            <p>Reported problems, skill rejections, and moderation actions</p>
+                            <div class="report-actions">
+                                <button class="btn btn-outline" onclick="downloadReport('issues', 'csv')">CSV</button>
+                                <button class="btn btn-primary" onclick="downloadReport('issues', 'pdf')">PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Report Generator -->
+                <div class="custom-report-section">
+                    <h2>Custom Report Generator</h2>
+                    <form class="custom-report-form" id="customReportForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reportType">Report Type</label>
+                                <select id="reportType" name="reportType">
+                                    <option value="users">Users</option>
+                                    <option value="swaps">Swaps</option>
+                                    <option value="skills">Skills</option>
+                                    <option value="feedback">Feedback</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateFrom">From Date</label>
+                                <input type="date" id="dateFrom" name="dateFrom">
+                            </div>
+                            <div class="form-group">
+                                <label for="dateTo">To Date</label>
+                                <input type="date" id="dateTo" name="dateTo">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reportFilters">Additional Filters</label>
+                            <textarea id="reportFilters" name="filters" rows="3" placeholder="Specify any additional criteria (optional)"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" onclick="generateCustomReport('csv')">Generate CSV</button>
+                            <button type="button" class="btn btn-primary" onclick="generateCustomReport('pdf')">Generate PDF</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAuth();
+            setDefaultDates();
+        });
+    </script>
+</body>
+</html>

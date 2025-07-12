@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swap Dashboard - SkillSwap</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>SkillSwap</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="{% url 'index' %}" class="nav-link">Home</a>
+                <a href="{% url 'profile' %}" class="nav-link">Profile</a>
+                <a href="{% url 'dashboard' %}" class="nav-link active">Dashboard</a>
+                <button class="btn btn-outline" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <h1>My Swap Requests</h1>
+                    <p>Manage your skill exchange requests</p>
+                </div>
+
+                <div class="dashboard-filters">
+                    <div class="filter-tabs">
+                        <button class="tab-btn active" onclick="filterSwaps('all')">All Requests</button>
+                        <button class="tab-btn" onclick="filterSwaps('pending')">Pending</button>
+                        <button class="tab-btn" onclick="filterSwaps('accepted')">Accepted</button>
+                        <button class="tab-btn" onclick="filterSwaps('rejected')">Rejected</button>
+                    </div>
+                </div>
+
+                <div class="swaps-section">
+                    <div class="section-header">
+                        <h3>Received Requests</h3>
+                        <span class="badge" id="receivedCount">0</span>
+                    </div>
+                    <div class="swaps-grid" id="receivedSwaps">
+                        <!-- Received swap requests will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="swaps-section">
+                    <div class="section-header">
+                        <h3>Sent Requests</h3>
+                        <span class="badge" id="sentCount">0</span>
+                    </div>
+                    <div class="swaps-grid" id="sentSwaps">
+                        <!-- Sent swap requests will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rating Modal -->
+    <div class="modal" id="ratingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Rate Your Experience</h3>
+                <button class="close-btn" onclick="closeRatingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="rating-section">
+                    <p>How was your skill swap experience?</p>
+                    <div class="star-rating" id="starRating">
+                        <span class="star-btn" data-rating="1">★</span>
+                        <span class="star-btn" data-rating="2">★</span>
+                        <span class="star-btn" data-rating="3">★</span>
+                        <span class="star-btn" data-rating="4">★</span>
+                        <span class="star-btn" data-rating="5">★</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ratingComment">Comments (Optional)</label>
+                    <textarea id="ratingComment" rows="3" placeholder="Share your experience..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeRatingModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitRating()">Submit Rating</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            loadSwapDashboard();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - SkillSwap</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>SkillSwap</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="swap_dashboard.html" class="nav-link">Dashboard</a>
+                <button class="btn btn-outline" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="profile-detail-container">
+                <div class="profile-card">
+                    <div class="profile-info">
+                        <div class="profile-avatar">
+                            <img id="userAvatar" src="https://via.placeholder.com/120" alt="User Avatar">
+                        </div>
+                        
+                        <div class="profile-details">
+                            <h1 id="userName">Loading...</h1>
+                            <p id="userLocation" class="location"></p>
+                            <div class="rating">
+                                <div class="stars" id="userRating">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">☆</span>
+                                </div>
+                                <span id="ratingCount">(0 reviews)</span>
+                            </div>
+                            <p id="userAvailability" class="availability"></p>
+                        </div>
+                    </div>
+
+                    <div class="skills-section">
+                        <div class="skills-offered">
+                            <h3>Skills Offered</h3>
+                            <div class="skills-list" id="offeredSkills">
+                                <!-- Skills will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div class="skills-wanted">
+                            <h3>Skills Wanted</h3>
+                            <div class="skills-list" id="wantedSkills">
+                                <!-- Skills will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-section">
+                        <button class="btn btn-primary btn-large" id="requestSwapBtn" onclick="requestSwap()">
+                            Request Skill Swap
+                        </button>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <h3>Reviews & Feedback</h3>
+                    <div class="feedback-list" id="feedbackList">
+                        <!-- Feedback will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            loadUserDetails();
+        });
+    </script>
+</body>
+</html>

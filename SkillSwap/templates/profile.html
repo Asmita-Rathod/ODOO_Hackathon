@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>My Profile - SkillSwap</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>SkillSwap</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="{% url 'index' %}" class="nav-link">Home</a>
+                <a href="{% url 'profile' %}" class="nav-link active">Profile</a>
+                <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <h1>My Profile</h1>
+                    <p>Manage your information and skills to connect with others</p>
+                </div>
+
+                <form class="profile-form" id="profileForm">
+                    <!-- Basic Information Section -->
+                    <div class="form-section">
+                        <h3>
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 8px;">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            Basic Information
+                        </h3>
+                        
+                        <div class="photo-upload">
+                            <div class="photo-preview">
+                                <img id="photoPreview" src="https://via.placeholder.com/120" alt="Profile Photo">
+                            </div>
+                            <div class="photo-controls">
+                                <input type="file" id="profilePhoto" accept="image/*" style="display: none;">
+                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('profilePhoto').click()">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                    </svg>
+                                    Upload Photo
+                                </button>
+                                <p class="upload-hint">JPG, PNG up to 5MB</p>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName">Full Name *</label>
+                                <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profileLocation">Location</label>
+                                <input type="text" id="profileLocation" name="location" placeholder="City, Country">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills Section -->
+                    <div class="form-section">
+                        <h3>
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 8px;">
+                                <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+                            </svg>
+                            Skills & Expertise
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label for="skillsOfferedInput">Skills I Offer</label>
+                            <div class="skills-input">
+                                <input type="text" id="skillsOfferedInput" placeholder="Type a skill and press Enter">
+                                <div class="skills-tags" id="offeredTags"></div>
+                            </div>
+                            <p class="form-hint">Add skills you can teach others (e.g., Photoshop, Python, Guitar)</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="skillsWantedInput">Skills I Want to Learn</label>
+                            <div class="skills-input">
+                                <input type="text" id="skillsWantedInput" placeholder="Type a skill and press Enter">
+                                <div class="skills-tags" id="wantedTags"></div>
+                            </div>
+                            <p class="form-hint">Add skills you want to learn from others</p>
+                        </div>
+                    </div>
+
+                    <!-- Availability Section -->
+                    <div class="form-section">
+                        <h3>
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 8px;">
+                                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z"/>
+                            </svg>
+                            Availability & Settings
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label for="availability">When are you available?</label>
+                            <select id="availability" name="availability">
+                                <option value="flexible">Flexible - Anytime</option>
+                                <option value="weekends">Weekends Only</option>
+                                <option value="evenings">Evenings (6-10 PM)</option>
+                                <option value="weekdays">Weekdays (9-5 PM)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle-label">
+                                <input type="checkbox" id="profileVisibility" checked>
+                                <span class="toggle-slider"></span>
+                                <div class="toggle-content">
+                                    <strong>Make my profile public</strong>
+                                    <p class="toggle-description">When enabled, other users can find and view your profile</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="discardChanges()">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 6L18 18M6 18L18 6"/>
+                            </svg>
+                            Discard Changes
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17 3H5C3.89 3 3 3.9 3 5V19C3.89 19 5 19.9 5 19H19C20.1 19 21 19.1 21 18V7L17 3M19 17H5V5H16.17L19 7.83V17M12 12C13.1 12 14 11.1 14 10S13.1 8 12 8 10 8.9 10 10 10.9 12 12 12M16 15.43C16 14.62 15.41 13.93 14.61 13.78C13.77 13.62 12.95 13.53 12 13.53S10.23 13.62 9.39 13.78C8.59 13.93 8 14.62 8 15.43V16H16V15.43Z"/>
+                            </svg>
+                            Save Profile
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            loadUserProfile();
+            initializeSkillsInput();
+            initializePhotoUpload();
+            initializeHamburger();
+        });
+
+        document.getElementById('profileForm').addEventListener('submit', saveProfile);
+    </script>
+</body>
+</html>

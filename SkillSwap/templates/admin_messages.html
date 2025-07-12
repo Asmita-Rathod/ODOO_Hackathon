@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Messages - SkillSwap Admin</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar admin-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>SkillSwap Admin</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="{% url 'admin_dashboard' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'admin_users' %}" class="nav-link">Users</a>
+                <a href="{% url 'admin_skills' %}" class="nav-link">Skills</a>
+                <a href="{% url 'admin_swaps' %}" class="nav-link">Swaps</a>
+                <a href="{% url 'admin_messages' %}" class="nav-link active">Messages</a>
+                <a href="{% url 'admin_reports' %}" class="nav-link">Reports</a>
+                <button class="btn btn-outline" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content admin-main">
+        <div class="container">
+            <div class="admin-header">
+                <h1>Platform Messages</h1>
+                <p>Send announcements to all users</p>
+            </div>
+
+            <div class="messages-container">
+                <div class="compose-section">
+                    <h2>Compose New Message</h2>
+                    <form class="message-form" id="messageForm">
+                        <div class="form-group">
+                            <label for="messageSubject">Subject *</label>
+                            <input type="text" id="messageSubject" name="subject" required placeholder="Enter message subject">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="messageBody">Message *</label>
+                            <textarea id="messageBody" name="body" rows="6" required placeholder="Type your message here. This will be sent to all users..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="messageType">Message Type</label>
+                            <select id="messageType" name="messageType">
+                                <option value="announcement">Announcement</option>
+                                <option value="update">Feature Update</option>
+                                <option value="maintenance">Maintenance Notice</option>
+                                <option value="policy">Policy Update</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" onclick="previewMessage()">Preview</button>
+                            <button type="submit" class="btn btn-primary">Send to All Users</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="sent-messages-section">
+                    <h2>Sent Messages</h2>
+                    <div class="messages-list" id="sentMessagesList">
+                        <!-- Sent messages will be loaded here -->
+                    </div>
+                    
+                    <div class="pagination" id="messagesPagination">
+                        <button class="btn btn-outline" onclick="changeMessagesPage(-1)">Previous</button>
+                        <span id="messagesPageInfo">Page 1 of 1</span>
+                        <button class="btn btn-outline" onclick="changeMessagesPage(1)">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Message Preview Modal -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Message Preview</h3>
+                <button class="close-btn" onclick="closePreviewModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="message-preview" id="messagePreview">
+                    <!-- Preview content will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closePreviewModal()">Edit</button>
+                <button class="btn btn-primary" onclick="sendMessageFromPreview()">Send Message</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAuth();
+            loadSentMessages();
+        });
+
+        document.getElementById('messageForm').addEventListener('submit', sendPlatformMessage);
+    </script>
+</body>
+</html>
